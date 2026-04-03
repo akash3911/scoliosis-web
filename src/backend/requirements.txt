@@ -1,0 +1,28 @@
+# Core API
+fastapi
+uvicorn
+gunicorn
+python-multipart
+python-dotenv
+
+# Image processing
+opencv-python-headless
+Pillow
+
+# Data
+numpy
+pandas
+scipy
+
+# ML / AI
+torch
+torchvision
+ultralytics
+
+# Utilities
+requests
+tqdm
+PyYAML
+mat4py
+psutil
+thop
