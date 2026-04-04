@@ -88,3 +88,5 @@ interface ISegmentationResponse {
 }
 
 declare module "pdfjs-dist/build/pdf.worker.entry";
+declare module "nprogress/nprogress.css";
+declare module "*.css";

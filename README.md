@@ -15,5 +15,4 @@ source venv/bin/activate
 pip install -r requirements.txt
 pip uninstall opencv-python -y
 pip install opencv-python-headless --force-reinstall
-uvicorn main:app
-```
+c```

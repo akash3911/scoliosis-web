@@ -40,7 +40,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <NextHead>
         <link rel="icon" href="data:," />
         <link rel="shortcut icon" href="data:," />
-        <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0073f5" />
       </NextHead>
       <Head />

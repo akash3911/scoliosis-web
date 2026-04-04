@@ -507,10 +507,7 @@ const MainAppPage = () => {
                     Algorithm so we can&apos;t display any info on it.
                   </p>
                   <p className="text-red-500 text-sm">
-                    It's a bug that occurs in{" "}
-                    <b>{(0.046875 * 100).toFixed(2)}%</b> or <b>6/128</b> of our
-                    images. We&apos;re still trying to fix it. We hope you
-                    understand!
+                    We&apos;re still trying to fix it.
                   </p>
                 </div>
               )}
