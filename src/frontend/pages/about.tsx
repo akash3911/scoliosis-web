@@ -8,6 +8,7 @@ import enterAnim from "@/utils/enterAnim";
 import Head from "components/Head";
 import useRefInView from "@/hooks/useRefInView";
 import Link from "next/link";
+import Image from "next/image";
 
 const AboutPage = () => {
 
@@ -48,6 +49,25 @@ const AboutPage = () => {
             layers.
           </motion.p>
 
+          <motion.h2
+            {...enterAnim(0.4)}
+            className="mt-10 mb-4 text-2xl font-bold text-gray-800"
+          >
+            Architecture
+          </motion.h2>
+          <motion.div
+            {...enterAnim(0.45)}
+            className="relative w-full min-h-[260px] rounded-xl overflow-hidden shadow-lg bg-white"
+          >
+            <Image
+              src="/architecture.png"
+              alt="Scoliotect architecture diagram"
+              layout="fill"
+              objectFit="contain"
+              priority={false}
+            />
+          </motion.div>
+
           <h2 className="mt-16 mb-6 text-2xl text-center text-gray-700 font-semibold">
             Team Members
           </h2>
@@ -60,7 +80,7 @@ const AboutPage = () => {
             <p className="font-medium">SDP ID: 20250858</p>
           </div>
 
-          <h2 className="mt-16 mb-6 text-2xl text-center text-gray-700 font-semibold">
+          {/* <h2 className="mt-16 mb-6 text-2xl text-center text-gray-700 font-semibold">
             References
           </h2>
           <Link href="http://www.digitalimaginggroup.ca/members/Shuo/MICCAIAutomatic.pdf">
@@ -69,7 +89,7 @@ const AboutPage = () => {
                 Wu, H., Bailey, Chris
               </p>
             </a>
-          </Link>
+          </Link> */}
         </div>
       </main>
       

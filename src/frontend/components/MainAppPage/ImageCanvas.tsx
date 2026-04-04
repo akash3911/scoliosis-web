@@ -30,6 +30,9 @@ const ImageCanvas: React.FC<IImageCanvasProps> = (props, ref) => {
   const [cobbLabelPositions, setCobbLabelPositions] = useState<
     Partial<Record<keyof AnglesType, { x: number; y: number }>>
   >({});
+  const [selectedLabel, setSelectedLabel] = useState<keyof AnglesType | null>(
+    null
+  );
   const [draggingLabel, setDraggingLabel] = useState<keyof AnglesType | null>(
     null
   );
@@ -71,6 +74,8 @@ const ImageCanvas: React.FC<IImageCanvasProps> = (props, ref) => {
   useEffect(() => {
     labelBoxesRef.current = {};
     setCobbLabelPositions({});
+    setSelectedLabel(null);
+    setDraggingLabel(null);
   }, [selectedFile, scoliotectAPIResponse]);
 
   useEffect(() => {
@@ -90,7 +95,7 @@ const ImageCanvas: React.FC<IImageCanvasProps> = (props, ref) => {
         drawSettings: drawSettings,
       });
     }
-  }, [drawSettings, cobbLabelPositions]);
+  }, [drawSettings, cobbLabelPositions, selectedLabel]);
 
   function getCanvasCoordinates(
     event: React.PointerEvent<HTMLCanvasElement>
@@ -105,15 +110,51 @@ const ImageCanvas: React.FC<IImageCanvasProps> = (props, ref) => {
   function onPointerDown(event: React.PointerEvent<HTMLCanvasElement>) {
     if (!selectedFile) return;
     const [x, y] = getCanvasCoordinates(event);
+    const labelHitSlop = 20;
+    const anchorSelectRadius = 80;
 
     const keys: (keyof AnglesType)[] = ["pt", "mt", "tl"];
-    const target = keys.find((key) => {
+    const strictTarget = keys.find((key) => {
       const box = labelBoxesRef.current[key];
       if (!box) return false;
-      return x >= box.x && x <= box.x + box.width && y >= box.y && y <= box.y + box.height;
+      return (
+        x >= box.x - labelHitSlop &&
+        x <= box.x + box.width + labelHitSlop &&
+        y >= box.y - labelHitSlop &&
+        y <= box.y + box.height + labelHitSlop
+      );
     });
 
-    if (!target) return;
+    let target = strictTarget;
+    if (!target) {
+      let nearest: { key: keyof AnglesType; dist: number } | null = null;
+      for (const key of keys) {
+        const box = labelBoxesRef.current[key];
+        if (!box) continue;
+        const dx = x - box.anchorX;
+        const dy = y - box.anchorY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist <= anchorSelectRadius && (!nearest || dist < nearest.dist)) {
+          nearest = { key, dist };
+        }
+      }
+      target = nearest ? nearest.key : undefined;
+    }
+
+    if (!target) {
+      if (selectedLabel) {
+        setSelectedLabel(null);
+      }
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (selectedLabel !== target) {
+      setSelectedLabel(target);
+      return;
+    }
 
     const targetBox = labelBoxesRef.current[target];
     if (!targetBox) return;
@@ -122,8 +163,6 @@ const ImageCanvas: React.FC<IImageCanvasProps> = (props, ref) => {
       dy: y - targetBox.anchorY,
     };
 
-    event.preventDefault();
-    event.stopPropagation();
     event.currentTarget.setPointerCapture(event.pointerId);
     setDraggingLabel(target);
   }
@@ -524,6 +563,11 @@ const ImageCanvas: React.FC<IImageCanvasProps> = (props, ref) => {
 
     ctx.current.fillStyle = `rgba(0,0,0,0.7)`;
     ctx.current.fillRect(labelBoxX, labelBoxY, labelBoxWidth, labelBoxHeight);
+    if (selectedLabel === angleType) {
+      ctx.current.strokeStyle = "rgba(255,255,255,0.95)";
+      ctx.current.lineWidth = 2;
+      ctx.current.strokeRect(labelBoxX, labelBoxY, labelBoxWidth, labelBoxHeight);
+    }
     ctx.current.fillStyle = prevFillStyle;
     ctx.current.fillText(text, currentAnchor.x, currentAnchor.y);
 
