@@ -13,7 +13,7 @@ _KEYPOINTS_PER_VERTEBRA = 4
 
 def _get_model_path() -> Path:
     # backend/scoliotect/yolov8_detector.py -> backend/models/best.pt
-    return Path(__file__).resolve().parents[1] / "models" / "best.pt"
+    return Path(__file__).resolve().parents[1] / "models" / "bestn.pt"
 
 
 def get_yolov8_model() -> YOLO:
