@@ -1,6 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 
+const architectureImage = `${import.meta.env.BASE_URL}architecture.png`;
+const exampleImage1 = `${import.meta.env.BASE_URL}example_images/1.jpg`;
+const exampleImage2 = `${import.meta.env.BASE_URL}example_images/2.jpg`;
+const exampleImage4 = `${import.meta.env.BASE_URL}example_images/4.jpg`;
+
 const COLOR_PRESETS = ["#FFFFFF", "#000000", "#00FFFF"];
 const DISPLAY_TYPES: Array<{ label: string; value: LandmarkDisplayType }> = [
   { label: "No lines", value: "no_lines" },
@@ -228,7 +233,7 @@ function App() {
               </p>
             </div>
             <div className="hero-card">
-              <img src="/architecture.png" alt="Scoliotect architecture diagram" loading="eager" />
+              <img src={architectureImage} alt="Scoliotect architecture diagram" loading="eager" />
             </div>
           </div>
         </div>
@@ -278,9 +283,9 @@ function App() {
                         </button>
                       </div>
                       <div className="example-grid">
-                        <ExampleButton src="/example_images/1.jpg" onClick={handleExampleImage} />
-                        <ExampleButton src="/example_images/2.jpg" onClick={handleExampleImage} />
-                        <ExampleButton src="/example_images/4.jpg" onClick={handleExampleImage} />
+                        <ExampleButton label="example image 1" src={exampleImage1} onClick={handleExampleImage} />
+                        <ExampleButton label="example image 2" src={exampleImage2} onClick={handleExampleImage} />
+                        <ExampleButton label="example image 4" src={exampleImage4} onClick={handleExampleImage} />
                       </div>
                     </div>
                   ) : (
@@ -416,13 +421,13 @@ function App() {
 
 export default App;
 
-function ExampleButton({ src, onClick }: { src: string; onClick: (url: string) => Promise<void> }) {
+function ExampleButton({ label, src, onClick }: { label: string; src: string; onClick: (url: string) => Promise<void> }) {
   return (
     <button
       type="button"
       className="example-button"
       style={{ backgroundImage: `url(${src})` }}
-      aria-label={`Try example image ${src}`}
+      aria-label={`Try ${label}`}
       onClick={() => void onClick(src)}
     />
   );
